@@ -55,8 +55,8 @@ def triada_score(text: str) -> int:
     demo = bool(re.search(TRIADA_SIGNS[4], low))
     return sum([practice, templates, price]) + (1 if demo else 0)
 
-def passes_veil(text: str, require_triada: bool = True) -> tuple:
-    """Полная стоп-вуаль: (вердикт, причины отказов)."""
+def passes_veil(text: str, require_triada: bool = False) -> tuple:
+    """Стоп-вуаль: (вердикт, причины). Триада — мягкое правило (уместность), жёсткие — мусор/подпись/длина."""
     fails = []
     c = clean(text)
     if not c:

@@ -39,7 +39,7 @@ t('У0 is_clean=True', is_clean(c))
 t('У3 триада полная (≥3)', triada_score(c) >= 3)
 flat = 'Здравствуйте!\nСделаю быстро и качественно, обращайтесь.\n\nДенис'
 t('У3 без триады = 0', triada_score(clean(flat)) == 0)
-verdict, fails = passes_veil(dirty, require_triada=True)
+verdict, fails = passes_veil(dirty, require_triada=True)  # жирный заказ — триада обязательна
 t('У0+У3 полная вуаль: грязный черновик проходит после clean', verdict)
 
 # реальный кейс: тело без триады не проходит требование
