@@ -10,11 +10,10 @@ MUSOR = [
 ]
 
 TRIADA_SIGNS = [
-    r'занимае\w+ именно этим',
-    r'основн\w+ практик\w+|основное направление',
-    r'шаблон\w+|наработк\w+|готов\w+ решени\w+',
-    r'подвинуться|подвинемся|гибк\w+ в цене|10\s?[-–—]%|20\s?[-–—]%',
-    r'демо|показать до оплаты',
+    r'занимае\w+ именно этим|профильн\w+ направлен|основн\w+ практик\w+|основное направление|основная практика',
+    r'шаблон\w+|наработк\w+|готов\w+ (решени|блок|компонент)|готовые блоки',
+    r'подвинуться|подвинемся|гибк\w+ в цене|минус\s?\d{1,2}\s?%|\d{1,2}\s?[-–—]?\s?%',
+    r'демо|до оплаты|до первого платежа',
 ]
 
 def clean(text: str) -> str:
@@ -47,13 +46,13 @@ def is_clean(text: str) -> bool:
     return hi and sign and not has_musor(text) and 300 <= len(text) <= 5000
 
 def triada_score(text: str) -> int:
-    """У3: сколько из трёх элементов триады присутствует (0–3+)."""
+    """У3: сколько элементов триады присутствует (практика/шаблоны/цена/демо, 0–4)."""
     low = text.lower()
-    practice = bool(re.search(TRIADA_SIGNS[0], low) or re.search(TRIADA_SIGNS[1], low))
-    templates = bool(re.search(TRIADA_SIGNS[2], low))
-    price = bool(re.search(TRIADA_SIGNS[3], low))
-    demo = bool(re.search(TRIADA_SIGNS[4], low))
-    return sum([practice, templates, price]) + (1 if demo else 0)
+    practice = bool(re.search(TRIADA_SIGNS[0], low))
+    templates = bool(re.search(TRIADA_SIGNS[1], low))
+    price = bool(re.search(TRIADA_SIGNS[2], low))
+    demo = bool(re.search(TRIADA_SIGNS[3], low))
+    return sum([practice, templates, price, demo])
 
 def passes_veil(text: str, require_triada: bool = False) -> tuple:
     """Стоп-вуаль: (вердикт, причины). Триада — мягкое правило (уместность), жёсткие — мусор/подпись/длина."""
